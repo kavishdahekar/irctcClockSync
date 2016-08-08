@@ -15,7 +15,9 @@ queryPage = "https://www.irctc.co.in/eticketing/loginHome.jsf"
 # needs admin priveleges
 def _win_set_time(datetime):
 	import os
-	os.system("date "+str(datetime.day)+"/"+str(datetime.month)+"/"+str(datetime.year))
+	if os.system("date "+str(datetime.day)+"/"+str(datetime.month)+"/"+str(datetime.year)):
+		print("Please run with administrator priveleges.")
+		sys.exit(1)
 	os.system("time "+str(datetime.hour)+":"+str(datetime.minute)+":"+str(datetime.second))
 	print("Date set to : ",str(datetime.day)+"/"+str(datetime.month)+"/"+str(datetime.year))
 	print("Time set to : ",str(datetime.hour)+":"+str(datetime.minute)+":"+str(datetime.second))
