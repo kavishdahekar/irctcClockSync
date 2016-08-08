@@ -10,5 +10,5 @@ No manual configuration required.
 
     python irctcSyncClock.py
 
-**Screenshot :**
+**Screenshot :** (tried to simultaneously load the irctc page as well as run the script)
 ![Script in action](screenshots/inAction.jpg)
