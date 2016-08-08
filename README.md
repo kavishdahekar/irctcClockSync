@@ -9,3 +9,6 @@ No manual configuration required.
 **Usage :** (requires administrative priveleges)
 
     python irctcSyncClock.py
+
+**Screenshot :**
+![Script in action](screenshots/inAction.jpg)
