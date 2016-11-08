@@ -22,38 +22,16 @@ def _win_set_time(datetime):
 	print("Date set to : ",str(datetime.day)+"/"+str(datetime.month)+"/"+str(datetime.year))
 	print("Time set to : ",str(datetime.hour)+":"+str(datetime.minute)+":"+str(datetime.second))
 
+# needs admin priveleges
+def _linux_set_time(datetime):
+	import os
 
-# haven't tested this yet, collaborators are free to test it
-# http://stackoverflow.com/a/12292874/2175224
-def _linux_set_time(time_tuple):
-	import ctypes
-	import ctypes.util
-	import time
-
-	# /usr/include/linux/time.h:
-	#
-	# define CLOCK_REALTIME					 0
-	CLOCK_REALTIME = 0
-
-	# /usr/include/time.h
-	#
-	# struct timespec
-	#  {
-	#	__time_t tv_sec;			/* Seconds.  */
-	#	long int tv_nsec;		   /* Nanoseconds.  */
-	#  };
-	class timespec(ctypes.Structure):
-		_fields_ = [("tv_sec", ctypes.c_long),
-					("tv_nsec", ctypes.c_long)]
-
-	librt = ctypes.CDLL(ctypes.util.find_library("rt"))
-
-	ts = timespec()
-	ts.tv_sec = int( time.mktime( datetime.datetime( *time_tuple[:6]).timetuple() ) )
-	ts.tv_nsec = time_tuple[6] * 1000000 # Millisecond to nanosecond
-
-	# http://linux.die.net/man/3/clock_settime
-	librt.clock_settime(CLOCK_REALTIME, ctypes.byref(ts))
+	retVal = os.system("sudo date --set '"+str(datetime.day)+"/"+str(datetime.month)+"/"+str(datetime.year)+" "+str(datetime.hour)+":"+str(datetime.minute)+":"+str(datetime.second)+"'")
+	if retVal != 0:
+		print("Please run with administrator priveleges.")
+		sys.exit(1)
+	print("Date set to : ",str(datetime.day)+"/"+str(datetime.month)+"/"+str(datetime.year))
+	print("Time set to : ",str(datetime.hour)+":"+str(datetime.minute)+":"+str(datetime.second))
 
 
 # --------------------------------------------------------------------------------------------
@@ -91,7 +69,9 @@ final_datetime = server_datetime + timedelta(seconds=secondsToAdd)
 print("Adjusted DateTime :",str(final_datetime))
 
 # apply the date and time according to the current platform
-if sys.platform=='linux2':
+if sys.platform=='linux':
+	print("\nPlatform : Linux\n")
 	_linux_set_time(final_datetime)
 elif  sys.platform=='win32':
+	print("\nPlatform : Windows\n")
 	_win_set_time(final_datetime)
